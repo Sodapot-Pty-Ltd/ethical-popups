@@ -1,4 +1,4 @@
-# Ethnical Popups
+# Ethical Popups
 
 When was the last time you paid attention to popup content before closing?
 
