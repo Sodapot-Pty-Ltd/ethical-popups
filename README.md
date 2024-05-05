@@ -37,6 +37,20 @@ import { Popup } from 'plugin/path'
 const controls = new Popup(options)
 ```
 
+Example:
+
+```js
+const controls = new Popup({
+  mountId: "root",
+  openText: "Subscribe",
+  content:
+    "<img width='200' title='Your ad, form, etc.' src='https://source.unsplash.com/random' />",
+  config: {
+    autoHideDelay: 3000,
+  },
+});
+```
+
 ### Function-based Controls
 
 ```ts
