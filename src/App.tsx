@@ -4,9 +4,9 @@ import "./App.css";
 
 function App({ openText, content, config }: AppProps) {
   const {
+    loaded,
     open,
     setOpen,
-    loaded,
     openText: openText_,
     content: content_,
   } = usePopup({
@@ -27,7 +27,7 @@ function App({ openText, content, config }: AppProps) {
       {/* Toggle */}
       <div
         className={`ep-bg-white ep-text-black ep-absolute ep-top-1/2 -ep-translate-y-1/2 ep-right-1 ep-py-1 ep-px-3 ep-rounded-l-xl ep-cursor-pointer ep-text-sm ep-transition-transform ${
-          open && "ep-translate-x-full"
+          !loaded && open && "ep-translate-x-full"
         }`}
         onClick={() => setOpen(!open)}
         style={{

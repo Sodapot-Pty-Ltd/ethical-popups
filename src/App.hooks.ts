@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useRef, useState, useEffect } from "react";
 
 /** Add custom configurations */
 export interface AppConfig {
@@ -8,6 +8,8 @@ export interface AppConfig {
   contentPadded?: boolean;
   autoHideDelay?: number;
   yOffset?: number | string;
+  onHide?: () => void;
+  onShow?: () => void;
 }
 
 export interface AppProps {
@@ -19,7 +21,8 @@ export interface AppProps {
 export default function usePopup({ openText, content, config }: AppProps) {
   const [loaded, setLoaded] = useState(false);
   const [open, setOpen] = useState(false);
-  const [openText_, setopenText] = useState(openText);
+  const isShowing = useRef<null | boolean>(null);
+  const [openText_, setOpenText] = useState(openText);
   const [content_, setContent] = useState(content);
 
   /** Auto-show on mount, or on update */
@@ -38,7 +41,7 @@ export default function usePopup({ openText, content, config }: AppProps) {
   useEffect(() => {
     const update = (ev: CustomEvent) => {
       const { openText, content } = ev.detail;
-      setopenText(openText);
+      setOpenText(openText);
       setContent(content);
       setLoaded(false);
     };
@@ -55,10 +58,24 @@ export default function usePopup({ openText, content, config }: AppProps) {
     };
   }, []);
 
+  useEffect(() => {
+    const isShowing_ = !loaded || open;
+    const showStateHasChanged = isShowing.current !== isShowing_;
+    isShowing.current = isShowing_;
+
+    if (showStateHasChanged) {
+      if (isShowing_) {
+        config?.onShow?.();
+      } else {
+        config?.onHide?.();
+      }
+    }
+  }, [loaded, open]);
+
   return {
+    loaded,
     open,
     setOpen,
-    loaded,
     openText: openText_,
     content: content_,
   };
